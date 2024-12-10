@@ -11,20 +11,17 @@ private:
 public:
     // Constructor
     Emotion(string name, string intensity) {
-        // Using `this` to access the current object's name and intensity
         this->name = name;
         this->intensity = intensity;
     }
 
     // Member function to describe the emotion
     void describe() {
-        // Using `this` to access the current object's attributes
         cout << "Emotion: " << this->name << ", Intensity: " << this->intensity << endl;
     }
 
     // Member function to modify the emotion's intensity
     void changeIntensity(string newIntensity) {
-        // Using `this` to modify the current object's intensity
         this->intensity = newIntensity;
         cout << "Changed " << this->name << " intensity to " << this->intensity << endl;
     }
@@ -39,46 +36,52 @@ private:
 public:
     // Constructor
     Person(string name, int age) {
-        // Using `this` to access the current object's name and age
         this->name = name;
         this->age = age;
     }
 
     // Member function to introduce the person
     void introduce() {
-        // Using `this` to refer to the current object (Person)
         cout << "Hello, my name is " << this->name << " and I am " << this->age << " years old." << endl;
     }
 
     // Member function to express an emotion
     void expressEmotion(Emotion emotion) {
-        // Using `this` to refer to the current object (Person) when expressing emotion
         cout << this->name << " is feeling ";
         emotion.describe();
     }
 };
 
 int main() {
-    // Instantiate Emotion objects
-    Emotion happiness("Happiness", "High");
-    Emotion sadness("Sadness", "Low");
+    // Create an array of Emotion objects
+    Emotion emotions[3] = {
+        Emotion("Happiness", "High"),
+        Emotion("Sadness", "Low"),
+        Emotion("Anger", "Moderate")
+    };
 
-    // Call member functions of Emotion
-    happiness.describe();
-    sadness.describe();
-    sadness.changeIntensity("Moderate");
+    // Call member functions of Emotion using the array
+    for (int i = 0; i < 3; i++) {
+        emotions[i].describe();
+    }
 
-    // Instantiate Person objects
-    Person alice("Alice", 25);
-    Person bob("Bob", 30);
+    // Change intensity of an emotion in the array
+    emotions[1].changeIntensity("High");
 
-    // Call member functions of Person
-    alice.introduce();
-    bob.introduce();
+    // Create Person objects
+    Person people[2] = {
+        Person("Alice", 25),
+        Person("Bob", 30)
+    };
 
-    // Express emotions
-    alice.expressEmotion(happiness);
-    bob.expressEmotion(sadness);
+    // Call member functions of Person using the array
+    for (int i = 0; i < 2; i++) {
+        people[i].introduce();
+    }
+
+    // Express emotions using the array of objects
+    people[0].expressEmotion(emotions[0]); // Alice feels Happiness
+    people[1].expressEmotion(emotions[1]); // Bob feels Sadness
 
     return 0;
 }
