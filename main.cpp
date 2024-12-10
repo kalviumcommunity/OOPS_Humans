@@ -12,6 +12,26 @@ private:
     static int totalEmotions;
 
 public:
+    // Accessor (Getter) for name
+    string getName() {
+        return name;
+    }
+
+    // Mutator (Setter) for name
+    void setName(string newName) {
+        name = newName;
+    }
+
+    // Accessor (Getter) for intensity
+    string getIntensity() {
+        return intensity;
+    }
+
+    // Mutator (Setter) for intensity
+    void setIntensity(string newIntensity) {
+        intensity = newIntensity;
+    }
+
     // Member function to set emotion details
     void setEmotion(string name, string intensity) {
         this->name = name;
@@ -43,6 +63,30 @@ private:
     static int totalPeople;
 
 public:
+    // Accessor (Getter) for name
+    string getName() {
+        return name;
+    }
+
+    // Mutator (Setter) for name
+    void setName(string newName) {
+        name = newName;
+    }
+
+    // Accessor (Getter) for age
+    int getAge() {
+        return age;
+    }
+
+    // Mutator (Setter) for age
+    void setAge(int newAge) {
+        if (newAge > 0) { // Validation: Age must be positive
+            age = newAge;
+        } else {
+            cout << "Invalid age!" << endl;
+        }
+    }
+
     // Member function to set person details
     void setPerson(string name, int age) {
         this->name = name;
@@ -71,6 +115,10 @@ int main() {
     emotions[1].setEmotion("Sadness", "Low");
     emotions[2].setEmotion("Anger", "Moderate");
 
+    // Modify an emotion using mutators
+    emotions[0].setIntensity("Very High");
+    cout << "Modified Emotion Intensity for " << emotions[0].getName() << ": " << emotions[0].getIntensity() << endl;
+
     // Display emotions
     for (int i = 0; i < 3; i++) {
         emotions[i].describe();
@@ -83,6 +131,13 @@ int main() {
     Person people[2];
     people[0].setPerson("Alice", 25);
     people[1].setPerson("Bob", 30);
+
+    // Modify person details using mutators
+    people[0].setName("Alicia");
+    people[1].setAge(35);
+    cout << "Modified Person Details:\n";
+    cout << people[0].getName() << " is now " << people[0].getAge() << " years old." << endl;
+    cout << people[1].getName() << " is now " << people[1].getAge() << " years old." << endl;
 
     // Introduce people
     for (int i = 0; i < 2; i++) {
