@@ -5,13 +5,35 @@ using namespace std;
 // Class 1: Emotion
 class Emotion {
 private:
-    string name;
-    string intensity;
+    string name;         // Name of the emotion (e.g., Happiness, Sadness)
+    string intensity;    // Intensity level of the emotion (e.g., High, Low)
 
     // Static variable to track the total number of Emotion objects
     static int totalEmotions;
 
 public:
+    // Default constructor
+    Emotion() {
+        name = "Unknown";
+        intensity = "Neutral";
+        totalEmotions++; // Increment the static variable
+        cout << "Emotion object created with default constructor." << endl;
+    }
+
+    // Parameterized constructor
+    Emotion(string name, string intensity) {
+        this->name = name;
+        this->intensity = intensity;
+        totalEmotions++; // Increment the static variable
+        cout << "Emotion object created with parameterized constructor." << endl;
+    }
+
+    // Destructor
+    ~Emotion() {
+        totalEmotions--; // Decrement the static variable
+        cout << "Emotion object destroyed." << endl;
+    }
+
     // Accessor (Getter) for name
     string getName() {
         return name;
@@ -32,19 +54,12 @@ public:
         intensity = newIntensity;
     }
 
-    // Member function to set emotion details
-    void setEmotion(string name, string intensity) {
-        this->name = name;
-        this->intensity = intensity;
-        totalEmotions++; // Increment the static variable
-    }
-
     // Member function to describe the emotion
     void describe() {
         cout << "Emotion: " << name << ", Intensity: " << intensity << endl;
     }
 
-    // Static function to get the total number of emotions created
+    // Static function to get the total number of Emotion objects created
     static int getTotalEmotions() {
         return totalEmotions;
     }
@@ -56,13 +71,35 @@ int Emotion::totalEmotions = 0;
 // Class 2: Person
 class Person {
 private:
-    string name;
-    int age;
+    string name;   // Name of the person
+    int age;       // Age of the person
 
     // Static variable to track the total number of Person objects
     static int totalPeople;
 
 public:
+    // Default constructor
+    Person() {
+        name = "Unknown";
+        age = 0;
+        totalPeople++; // Increment the static variable
+        cout << "Person object created with default constructor." << endl;
+    }
+
+    // Parameterized constructor
+    Person(string name, int age) {
+        this->name = name;
+        this->age = age;
+        totalPeople++; // Increment the static variable
+        cout << "Person object created with parameterized constructor." << endl;
+    }
+
+    // Destructor
+    ~Person() {
+        totalPeople--; // Decrement the static variable
+        cout << "Person object destroyed." << endl;
+    }
+
     // Accessor (Getter) for name
     string getName() {
         return name;
@@ -87,19 +124,12 @@ public:
         }
     }
 
-    // Member function to set person details
-    void setPerson(string name, int age) {
-        this->name = name;
-        this->age = age;
-        totalPeople++; // Increment the static variable
-    }
-
     // Member function to introduce the person
     void introduce() {
         cout << "Hello, my name is " << name << " and I am " << age << " years old." << endl;
     }
 
-    // Static function to get the total number of people created
+    // Static function to get the total number of Person objects created
     static int getTotalPeople() {
         return totalPeople;
     }
@@ -109,44 +139,41 @@ public:
 int Person::totalPeople = 0;
 
 int main() {
-    // Create an array of Emotion objects
-    Emotion emotions[3];
-    emotions[0].setEmotion("Happiness", "High");
-    emotions[1].setEmotion("Sadness", "Low");
-    emotions[2].setEmotion("Anger", "Moderate");
+    // Demonstrating default constructors
+    Emotion defaultEmotion;
+    Person defaultPerson;
 
-    // Modify an emotion using mutators
-    emotions[0].setIntensity("Very High");
-    cout << "Modified Emotion Intensity for " << emotions[0].getName() << ": " << emotions[0].getIntensity() << endl;
+    // Using parameterized constructors
+    Emotion happiness("Happiness", "High");
+    Emotion sadness("Sadness", "Low");
+    Person alice("Alice", 25);
+    Person bob("Bob", 30);
+
+    // Modify default objects using mutators
+    defaultEmotion.setName("Curiosity");
+    defaultEmotion.setIntensity("Moderate");
+    defaultPerson.setName("John Doe");
+    defaultPerson.setAge(40);
 
     // Display emotions
-    for (int i = 0; i < 3; i++) {
-        emotions[i].describe();
-    }
+    cout << "\nDisplaying emotions:" << endl;
+    defaultEmotion.describe();
+    happiness.describe();
+    sadness.describe();
 
     // Display total number of emotions
-    cout << "Total emotions created: " << Emotion::getTotalEmotions() << endl;
-
-    // Create an array of Person objects
-    Person people[2];
-    people[0].setPerson("Alice", 25);
-    people[1].setPerson("Bob", 30);
-
-    // Modify person details using mutators
-    people[0].setName("Alicia");
-    people[1].setAge(35);
-    cout << "Modified Person Details:\n";
-    cout << people[0].getName() << " is now " << people[0].getAge() << " years old." << endl;
-    cout << people[1].getName() << " is now " << people[1].getAge() << " years old." << endl;
+    cout << "\nTotal emotions created: " << Emotion::getTotalEmotions() << endl;
 
     // Introduce people
-    for (int i = 0; i < 2; i++) {
-        people[i].introduce();
-    }
+    cout << "\nIntroducing people:" << endl;
+    defaultPerson.introduce();
+    alice.introduce();
+    bob.introduce();
 
     // Display total number of people
-    cout << "Total people created: " << Person::getTotalPeople() << endl;
+    cout << "\nTotal people created: " << Person::getTotalPeople() << endl;
 
+    // Objects go out of scope here, and destructors are called automatically
     return 0;
 }
 
