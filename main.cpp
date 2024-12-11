@@ -2,7 +2,7 @@
 #include <string>
 using namespace std;
 
-// Class 1: Emotion
+// Class 1: Emotion (Base Class)
 class Emotion {
 private:
     string name;         // Name of the emotion (e.g., Happiness, Sadness)
@@ -16,7 +16,7 @@ public:
     Emotion() {
         name = "Unknown";
         intensity = "Neutral";
-        totalEmotions++; // Increment the static variable
+        totalEmotions++;
         cout << "Emotion object created with default constructor." << endl;
     }
 
@@ -24,35 +24,23 @@ public:
     Emotion(string name, string intensity) {
         this->name = name;
         this->intensity = intensity;
-        totalEmotions++; // Increment the static variable
+        totalEmotions++;
         cout << "Emotion object created with parameterized constructor." << endl;
     }
 
     // Destructor
     ~Emotion() {
-        totalEmotions--; // Decrement the static variable
+        totalEmotions--;
         cout << "Emotion object destroyed." << endl;
     }
 
-    // Accessor (Getter) for name
-    string getName() {
-        return name;
-    }
+    // Accessor and mutator for name
+    string getName() { return name; }
+    void setName(string newName) { name = newName; }
 
-    // Mutator (Setter) for name
-    void setName(string newName) {
-        name = newName;
-    }
-
-    // Accessor (Getter) for intensity
-    string getIntensity() {
-        return intensity;
-    }
-
-    // Mutator (Setter) for intensity
-    void setIntensity(string newIntensity) {
-        intensity = newIntensity;
-    }
+    // Accessor and mutator for intensity
+    string getIntensity() { return intensity; }
+    void setIntensity(string newIntensity) { intensity = newIntensity; }
 
     // Member function to describe the emotion
     void describe() {
@@ -68,11 +56,34 @@ public:
 // Initialize the static variable
 int Emotion::totalEmotions = 0;
 
-// Class 2: Person
+// Derived Class (Single Inheritance): HappyEmotion inherits Emotion
+class HappyEmotion : public Emotion {
+private:
+    string causeOfHappiness; // Additional property specific to HappyEmotion
+
+public:
+    // Constructor
+    HappyEmotion(string name, string intensity, string cause) : Emotion(name, intensity) {
+        causeOfHappiness = cause;
+        cout << "HappyEmotion object created." << endl;
+    }
+
+    // Destructor
+    ~HappyEmotion() {
+        cout << "HappyEmotion object destroyed." << endl;
+    }
+
+    // Member function to describe happiness specifically
+    void describeHappiness() {
+        cout << "Happiness caused by: " << causeOfHappiness << endl;
+    }
+};
+
+// Class 2: Person (Base Class)
 class Person {
 private:
-    string name;   // Name of the person
-    int age;       // Age of the person
+    string name; // Name of the person
+    int age;     // Age of the person
 
     // Static variable to track the total number of Person objects
     static int totalPeople;
@@ -82,7 +93,7 @@ public:
     Person() {
         name = "Unknown";
         age = 0;
-        totalPeople++; // Increment the static variable
+        totalPeople++;
         cout << "Person object created with default constructor." << endl;
     }
 
@@ -90,38 +101,27 @@ public:
     Person(string name, int age) {
         this->name = name;
         this->age = age;
-        totalPeople++; // Increment the static variable
+        totalPeople++;
         cout << "Person object created with parameterized constructor." << endl;
     }
 
     // Destructor
     ~Person() {
-        totalPeople--; // Decrement the static variable
+        totalPeople--;
         cout << "Person object destroyed." << endl;
     }
 
-    // Accessor (Getter) for name
-    string getName() {
-        return name;
-    }
+    // Accessor and mutator for name
+    string getName() { return name; }
+    void setName(string newName) { name = newName; }
 
-    // Mutator (Setter) for name
-    void setName(string newName) {
-        name = newName;
-    }
-
-    // Accessor (Getter) for age
-    int getAge() {
-        return age;
-    }
-
-    // Mutator (Setter) for age
+    // Accessor and mutator for age
+    int getAge() { return age; }
     void setAge(int newAge) {
-        if (newAge > 0) { // Validation: Age must be positive
+        if (newAge > 0)
             age = newAge;
-        } else {
+        else
             cout << "Invalid age!" << endl;
-        }
     }
 
     // Member function to introduce the person
@@ -129,7 +129,7 @@ public:
         cout << "Hello, my name is " << name << " and I am " << age << " years old." << endl;
     }
 
-    // Static function to get the total number of Person objects created
+    // Static function to get the total number of people
     static int getTotalPeople() {
         return totalPeople;
     }
@@ -138,42 +138,47 @@ public:
 // Initialize the static variable
 int Person::totalPeople = 0;
 
+// Derived Class (Composition): SpecialPerson combines Person and Emotion
+class SpecialPerson : public Person {
+private:
+    Emotion emotion; // Composition: Every SpecialPerson has an associated Emotion
+
+public:
+    // Parameterized constructor
+    SpecialPerson(string name, int age, Emotion emotion) : Person(name, age), emotion(emotion) {
+        cout << "SpecialPerson object created." << endl;
+    }
+
+    // Destructor
+    ~SpecialPerson() {
+        cout << "SpecialPerson object destroyed." << endl;
+    }
+
+    // Member function to describe the SpecialPerson's emotion
+    void expressEmotion() {
+        cout << "SpecialPerson " << getName() << " is feeling: ";
+        emotion.describe();
+    }
+};
+
 int main() {
-    // Demonstrating default constructors
-    Emotion defaultEmotion;
-    Person defaultPerson;
-
-    // Using parameterized constructors
-    Emotion happiness("Happiness", "High");
-    Emotion sadness("Sadness", "Low");
-    Person alice("Alice", 25);
-    Person bob("Bob", 30);
-
-    // Modify default objects using mutators
-    defaultEmotion.setName("Curiosity");
-    defaultEmotion.setIntensity("Moderate");
-    defaultPerson.setName("John Doe");
-    defaultPerson.setAge(40);
-
-    // Display emotions
-    cout << "\nDisplaying emotions:" << endl;
-    defaultEmotion.describe();
+    // Demonstrating Single Inheritance with HappyEmotion
+    HappyEmotion happiness("Happiness", "High", "Achieving goals");
     happiness.describe();
-    sadness.describe();
+    happiness.describeHappiness();
 
-    // Display total number of emotions
-    cout << "\nTotal emotions created: " << Emotion::getTotalEmotions() << endl;
+    // Demonstrating Multiple Inheritance using Composition
+    Emotion sadness("Sadness", "Low");
+    SpecialPerson alice("Alice", 25, sadness);
 
-    // Introduce people
-    cout << "\nIntroducing people:" << endl;
-    defaultPerson.introduce();
     alice.introduce();
-    bob.introduce();
+    alice.expressEmotion();
 
-    // Display total number of people
-    cout << "\nTotal people created: " << Person::getTotalPeople() << endl;
+    // Display total objects
+    cout << "\nTotal emotions created: " << Emotion::getTotalEmotions() << endl;
+    cout << "Total people created: " << Person::getTotalPeople() << endl;
 
-    // Objects go out of scope here, and destructors are called automatically
+    // Objects go out of scope, and destructors will be called automatically
     return 0;
 }
 
