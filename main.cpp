@@ -47,6 +47,11 @@ public:
         cout << "Emotion: " << name << ", Intensity: " << intensity << endl;
     }
 
+    // Overloaded describe function to provide additional details
+    void describe(string extraDetails) {
+        cout << "Emotion: " << name << ", Intensity: " << intensity << ", Details: " << extraDetails << endl;
+    }
+
     // Static function to get the total number of Emotion objects created
     static int getTotalEmotions() {
         return totalEmotions;
@@ -167,10 +172,13 @@ int main() {
     happiness.describe();
     happiness.describeHappiness();
 
-    // Demonstrating Multiple Inheritance using Composition
+    // Demonstrating Function Overloading with Emotion
     Emotion sadness("Sadness", "Low");
-    SpecialPerson alice("Alice", 25, sadness);
+    sadness.describe(); // Default description
+    sadness.describe("This is due to personal loss."); // Overloaded description
 
+    // Demonstrating Multiple Inheritance using Composition
+    SpecialPerson alice("Alice", 25, sadness);
     alice.introduce();
     alice.expressEmotion();
 
