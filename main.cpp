@@ -9,13 +9,16 @@ public:
     // Pure virtual function for custom behavior
     virtual void customBehavior() = 0;
 
+    // Pure virtual function for describing the emotion
+    virtual void describe() const = 0;
+
     // Virtual destructor to ensure proper cleanup of derived objects
     virtual ~BaseEmotion() {}
 };
 
-// Class 1: Emotion (derived from BaseEmotion)
+// Class 1: Emotion (Base class implementing BaseEmotion)
 class Emotion : public BaseEmotion {
-private:
+protected:
     string name;
     string intensity;
 
@@ -42,8 +45,8 @@ public:
     string getIntensity() const { return intensity; }
     void setIntensity(string intensity) { this->intensity = intensity; }
 
-    // Member function to describe the emotion
-    void describe() const {
+    // Override describe method
+    void describe() const override {
         cout << "Emotion: " << name << ", Intensity: " << intensity << endl;
     }
 
@@ -54,14 +57,58 @@ public:
 
     // Overriding customBehavior from BaseEmotion
     void customBehavior() override {
-        cout << "Custom behavior of " << name << ": Expressing at " << intensity << " intensity." << endl;
+        cout << "Generic Emotion Behavior: " << name << " at " << intensity << " intensity." << endl;
     }
 };
 
 // Initialize the static variable
 int Emotion::totalEmotions = 0;
 
-// Class 2: Person
+// Class 2: PositiveEmotion (derived from Emotion)
+class PositiveEmotion : public Emotion {
+private:
+    string positivityMessage;
+
+public:
+    // Constructor
+    PositiveEmotion(string name, string intensity, string positivityMessage)
+        : Emotion(name, intensity), positivityMessage(positivityMessage) {}
+
+    // Override describe
+    void describe() const override {
+        cout << "Positive Emotion: " << name << ", Intensity: " << intensity
+             << ". Message: " << positivityMessage << endl;
+    }
+
+    // Overriding customBehavior
+    void customBehavior() override {
+        cout << "Expressing positivity through " << name << " with intensity " << intensity << endl;
+    }
+};
+
+// Class 3: NegativeEmotion (derived from Emotion)
+class NegativeEmotion : public Emotion {
+private:
+    string negativityCause;
+
+public:
+    // Constructor
+    NegativeEmotion(string name, string intensity, string negativityCause)
+        : Emotion(name, intensity), negativityCause(negativityCause) {}
+
+    // Override describe
+    void describe() const override {
+        cout << "Negative Emotion: " << name << ", Intensity: " << intensity
+             << ". Cause: " << negativityCause << endl;
+    }
+
+    // Overriding customBehavior
+    void customBehavior() override {
+        cout << "Dealing with negativity caused by " << negativityCause << " through " << name << endl;
+    }
+};
+
+// Class 4: Person
 class Person {
 private:
     string name;
@@ -96,7 +143,7 @@ public:
     }
 
     // Member function to express an emotion
-    void expressEmotion(const Emotion& emotion) const {
+    void expressEmotion(const BaseEmotion& emotion) const {
         cout << name << " is feeling ";
         emotion.describe();
     }
@@ -110,14 +157,14 @@ public:
 // Initialize the static variable
 int Person::totalPeople = 0;
 
-// Class 3: EmotionManager (SRP: Manages all emotions)
+// Class 5: EmotionManager (SRP: Manages all emotions)
 class EmotionManager {
 private:
-    vector<Emotion*> emotions; // Store dynamic Emotion objects
+    vector<BaseEmotion*> emotions; // Store dynamic BaseEmotion objects
 
 public:
     // Add a new emotion
-    void addEmotion(Emotion* emotion) {
+    void addEmotion(BaseEmotion* emotion) {
         emotions.push_back(emotion);
     }
 
@@ -139,12 +186,12 @@ public:
 
 // Main Function
 int main() {
-    // Using EmotionManager to handle all emotions (SRP)
+    // Using EmotionManager to handle all emotions (SRP + OCP)
     EmotionManager emotionManager;
 
     // Create dynamic Emotion objects
-    Emotion* happiness = new Emotion("Happiness", "High");
-    Emotion* sadness = new Emotion("Sadness", "Low");
+    BaseEmotion* happiness = new PositiveEmotion("Happiness", "High", "Spread Joy");
+    BaseEmotion* sadness = new NegativeEmotion("Sadness", "Low", "Lost Opportunities");
 
     // Add emotions to the manager
     emotionManager.addEmotion(happiness);
