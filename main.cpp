@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 // Abstract Class: BaseEmotion
@@ -109,48 +110,69 @@ public:
 // Initialize the static variable
 int Person::totalPeople = 0;
 
-// Main Function
-int main() {
-    // Using dynamic memory allocation
-    Emotion* emotions[2];
-    emotions[0] = new Emotion("Happiness", "High");
-    emotions[1] = new Emotion("Sadness", "Low");
+// Class 3: EmotionManager (SRP: Manages all emotions)
+class EmotionManager {
+private:
+    vector<Emotion*> emotions; // Store dynamic Emotion objects
 
-    // Using polymorphism with the BaseEmotion class
-    BaseEmotion* baseEmotion = emotions[0];
-    baseEmotion->customBehavior();
-
-    // Display all emotions
-    for (int i = 0; i < 2; i++) {
-        emotions[i]->describe();
+public:
+    // Add a new emotion
+    void addEmotion(Emotion* emotion) {
+        emotions.push_back(emotion);
     }
 
-    // Display total emotions
+    // Display all emotions
+    void displayAllEmotions() const {
+        cout << "Emotions:" << endl;
+        for (const auto& emotion : emotions) {
+            emotion->describe();
+        }
+    }
+
+    // Destructor to clean up memory
+    ~EmotionManager() {
+        for (auto& emotion : emotions) {
+            delete emotion;
+        }
+    }
+};
+
+// Main Function
+int main() {
+    // Using EmotionManager to handle all emotions (SRP)
+    EmotionManager emotionManager;
+
+    // Create dynamic Emotion objects
+    Emotion* happiness = new Emotion("Happiness", "High");
+    Emotion* sadness = new Emotion("Sadness", "Low");
+
+    // Add emotions to the manager
+    emotionManager.addEmotion(happiness);
+    emotionManager.addEmotion(sadness);
+
+    // Display all emotions
+    emotionManager.displayAllEmotions();
+
+    // Show total emotions
     cout << "Total emotions created: " << Emotion::getTotalEmotions() << endl;
 
-    // Dynamic allocation for Person objects
+    // Create dynamic Person objects
     Person* person1 = new Person("Alice", 25);
     Person* person2 = new Person("Bob", 30);
 
     // Introduce people and express emotions
     person1->introduce();
-    person1->expressEmotion(*emotions[0]);
+    person1->expressEmotion(*happiness);
 
     person2->introduce();
-    person2->expressEmotion(*emotions[1]);
+    person2->expressEmotion(*sadness);
 
-    // Display total people
+    // Show total people
     cout << "Total people created: " << Person::getTotalPeople() << endl;
 
     // Clean up memory
-    delete emotions[0];
-    delete emotions[1];
     delete person1;
     delete person2;
-
-    // Final count after destruction
-    cout << "Final total emotions: " << Emotion::getTotalEmotions() << endl;
-    cout << "Final total people: " << Person::getTotalPeople() << endl;
 
     return 0;
 }
