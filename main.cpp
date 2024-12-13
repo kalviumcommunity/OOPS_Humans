@@ -157,19 +157,32 @@ public:
 // Initialize the static variable
 int Person::totalPeople = 0;
 
-// Class 5: EmotionManager (SRP: Manages all emotions)
-class EmotionManager {
+// Abstract Class: EmotionRepository (Dependency Inversion Principle)
+class EmotionRepository {
+public:
+    // Pure virtual function to add an emotion
+    virtual void addEmotion(BaseEmotion* emotion) = 0;
+
+    // Pure virtual function to display all emotions
+    virtual void displayAllEmotions() const = 0;
+
+    // Virtual destructor
+    virtual ~EmotionRepository() {}
+};
+
+// Class 5: EmotionManager (implements EmotionRepository)
+class EmotionManager : public EmotionRepository {
 private:
     vector<BaseEmotion*> emotions; // Store dynamic BaseEmotion objects
 
 public:
-    // Add a new emotion
-    void addEmotion(BaseEmotion* emotion) {
+    // Override addEmotion
+    void addEmotion(BaseEmotion* emotion) override {
         emotions.push_back(emotion);
     }
 
-    // Display all emotions
-    void displayAllEmotions() const {
+    // Override displayAllEmotions
+    void displayAllEmotions() const override {
         cout << "Emotions:" << endl;
         for (const auto& emotion : emotions) {
             emotion->describe();
@@ -186,19 +199,19 @@ public:
 
 // Main Function
 int main() {
-    // Using EmotionManager to handle all emotions (SRP + OCP)
-    EmotionManager emotionManager;
+    // Using EmotionManager to handle all emotions (SRP + DIP)
+    EmotionRepository* emotionManager = new EmotionManager();
 
     // Create dynamic Emotion objects
     BaseEmotion* happiness = new PositiveEmotion("Happiness", "High", "Spread Joy");
     BaseEmotion* sadness = new NegativeEmotion("Sadness", "Low", "Lost Opportunities");
 
     // Add emotions to the manager
-    emotionManager.addEmotion(happiness);
-    emotionManager.addEmotion(sadness);
+    emotionManager->addEmotion(happiness);
+    emotionManager->addEmotion(sadness);
 
     // Display all emotions
-    emotionManager.displayAllEmotions();
+    emotionManager->displayAllEmotions();
 
     // Show total emotions
     cout << "Total emotions created: " << Emotion::getTotalEmotions() << endl;
@@ -220,6 +233,7 @@ int main() {
     // Clean up memory
     delete person1;
     delete person2;
+    delete emotionManager;
 
     return 0;
 }
